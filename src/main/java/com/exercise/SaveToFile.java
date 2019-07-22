@@ -1,3 +1,8 @@
+package com.exercise;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -5,44 +10,39 @@ import java.util.Scanner;
 
 public class SaveToFile {
 
-    String dictionaryPath = "C:\\statistics";
-    String filePath = "";
+    private static final Logger log = LogManager.getLogger(SaveToFile.class);
 
-    void createNewFolder() {
+    private String dictionaryPath = "C:\\statistics";
+    private String filePath = "";
 
+    public void createNewFolder() {
         dictionaryPath = "C:\\statistics";
         File directory = new File(dictionaryPath);
         if (!directory.exists()) {
             directory.mkdir();
             this.dictionaryPath = dictionaryPath;
-            System.out.println("Ustawiono domyslna sciezke C:\\statistics");
+            log.info("Ustawiono domyslna sciezke {}", dictionaryPath);
         } else {
-            System.out.println("Folder o takiej nazwie już istnieje!");
+            log.info("Ustawiono domyslna sciezke {}", dictionaryPath);
         }
     }
 
+    private int wordsNumber = 0;
+    private String[] wordsList;
+    private int lettersNumber = 0;
+    private String longestWord;
 
-    int wordsNumber = 0;
-    String[] wordsList;
-    int lettersNumber = 0;
-    String longestWord;
-
-
-    void wordOn() throws IOException {
-
+    public void wordOn() throws IOException {
         File directory = new File(dictionaryPath);
-
         if (!directory.exists()) {
-            System.out.println("Pierw stworz folder na statystyki!");
+            log.warn("Pierw stworz folder na statystyki!");
             return;
         }
-
 
         File txtFile = null;
         int x = 1;
         boolean breaker = true;
         do {
-
             try {
                 filePath = new StringBuilder().append(dictionaryPath).append("\\statystyka ").append(x).append(".txt").toString();
                 txtFile = new File(filePath);
@@ -54,17 +54,15 @@ public class SaveToFile {
                     x++;
                 }
             } catch (Exception e) {
-                System.out.println("dupa");
+                log.warn("Cos poszlo nie tak!");
             }
-
         } while (breaker);
 
 
-        System.out.println("Wpisz dowolne zdanie!");
+        log.info("Wpisz dowolne zdanie!");
 
         PrintWriter fileWriter = new PrintWriter(filePath);
         userInput();
-
 
         fileWriter.write("lista slow: ");
 
@@ -80,13 +78,9 @@ public class SaveToFile {
         fileWriter.write("najdluzsze slowo: ");
         fileWriter.write(longestWord + "\r\n");
         fileWriter.close();
-
-
     }
 
-
     private void userInput() {
-
         Scanner sc = new Scanner(System.in);
 
         String userInput = sc.nextLine().trim();
@@ -95,7 +89,6 @@ public class SaveToFile {
         wordsNumber = wordsList.length;
         lettersNumber = userInput.replace(" ", "").length();
         longestWord = longestWordCaluclate(wordsList);
-
     }
 
     private String longestWordCaluclate(String[] string) {
@@ -111,5 +104,4 @@ public class SaveToFile {
                 }
         return x;
     }
-
 }

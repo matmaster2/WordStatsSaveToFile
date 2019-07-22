@@ -1,15 +1,19 @@
+package com.exercise;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-
 public class Main {
 
+    private static final Logger log = LogManager.getLogger(Main.class);
 
-    public void menu() throws IOException {
+    private void menu() throws IOException {
 
-        System.out.print("\nWybierz co chcesz zrobic:\n[1] - Utworz folder \n[2] - Dodaj nowy plik ze statystykami\n[3] - Zamknij program\n\nTIP: Zeby wywolac któras z akcji wcisnij 1,2 lub 3 na klawiaturze!\n\n");
+        log.info("Wybierz co chcesz zrobic: \n{}\n{}\n{}\nTIP: Zeby wywolac ktoras z akcji wcisnij 1,2 lub 3 na klawiaturze!", "[1] - Utworz folder", "[2] - Dodaj nowy plik ze statystykami", "[3] - Zamknij program");
         Scanner sc = new Scanner(System.in);
         SaveToFile savetoFile = new SaveToFile();
 
@@ -20,30 +24,26 @@ public class Main {
                     menu();
                 case 2:
                     savetoFile.wordOn();
+                    log.info("Stworzono nowy plik ze statystykami :)");
                     menu();
                 case 3:
                     closeProgram();
                 default:
-                    System.out.println("Wpisa³eœ coœ innego ni¿ 1,2 i 3 :( Wpisz ponownie!");
+                    log.warn("Wpisales cos innego niz 1,2 lub 3! Wpisz pomownie!");
                     menu();
             }
         } catch (InputMismatchException e) {
-            System.out.println("Wpisa³eœ coœ innego ni¿ 1,2 i 3 :( Wpisz ponownie!");
+            log.warn("Wpisales cos innego niz 1,2 lub 3! Wpisz pomownie!");
             menu();
         }
-
     }
 
-
-    public void closeProgram() {
+    private void closeProgram() {
         System.exit(1);
     }
-
 
     public static void main(String[] args) throws IOException {
         Main main = new Main();
         main.menu();
     }
-
-
 }
